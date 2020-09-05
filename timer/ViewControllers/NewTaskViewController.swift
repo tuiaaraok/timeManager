@@ -154,8 +154,9 @@ extension NewTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
 // MARK: - UITextFieldDelegate
 
 extension NewTaskViewController: UITextFieldDelegate {
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-           textField.resignFirstResponder()
-           return true
-       }
+        textField.resignFirstResponder()
+        return true
+    }
 }

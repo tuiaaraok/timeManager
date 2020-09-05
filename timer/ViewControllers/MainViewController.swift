@@ -22,6 +22,10 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
 
         tableView.rowHeight = 80
+        
+        if tableView.numberOfRows(inSection: 0) > 0 {
+            emptyTaskLabel.isHidden = true
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -35,17 +39,17 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
        
         return tasks.count
-       }
+    }
        
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
            
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
         
         let task = tasks[indexPath.row]
-        cell.configure(task: task, indexPath: indexPath)
+        cell.configure(task, indexPath)
         
         return cell
-       }
+    }
     
     // MARK: - Table view delegate
        
@@ -79,7 +83,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         tableView.reloadData()
         
-        if tasks.count > 0 {
+        if tableView.numberOfRows(inSection: 0) > 0 {
             emptyTaskLabel.isHidden = true
         }
     }

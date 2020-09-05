@@ -20,7 +20,6 @@ class TableViewCell: UITableViewCell {
     var timer = Timer()
     var isTimerRunning = false
     var counter = 10.0
-    let timeManager = TimeManager()
     let audioManager = AudioManager()
     let dataManager = DataManager()
     
@@ -34,7 +33,7 @@ class TableViewCell: UITableViewCell {
         isStarted = false
     }
     
-    func configure (task: NSManagedObject, indexPath: IndexPath) {
+    func configure (_ task: NSManagedObject, _ indexPath: IndexPath) {
         
         taskNameLabel.text = task.value(forKey: "name") as? String
         self.indexPath = indexPath
