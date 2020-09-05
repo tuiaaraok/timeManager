@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class NewTaskViewController: UIViewController {
 
@@ -19,12 +20,12 @@ class NewTaskViewController: UIViewController {
     var minutes:Int = 0
     var seconds:Int = 0
     var counter = 0
-    
     var indexPath: IndexPath!
+    let dataManager = DataManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+  
         saveButton.isEnabled = false
         
         textField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
@@ -38,9 +39,9 @@ class NewTaskViewController: UIViewController {
     @IBAction func addButtonPressed(_ sender: Any) {
         
         if indexPath != nil {
-            tasks[indexPath.row] = Task(name: textField.text!, counter: Double(counter))
+            dataManager.edit(textField.text!, counter: Double(counter), indexPath: indexPath)
         } else {
-            tasks.append(Task(name: textField.text!, counter: Double(counter)))
+            dataManager.save(textField.text!, counter: Double(counter))
         }
     }
     
@@ -56,22 +57,22 @@ class NewTaskViewController: UIViewController {
     private func setupScreen() {
         
         textField.becomeFirstResponder()
+        
+        if indexPath != nil {
+            counter = Int((tasks[indexPath.row].value(forKey: "counter") as? Double)!)
+            textField.text = (tasks[indexPath.row].value(forKey: "name") as? String)!
+            hour = counter / 3600
+            pickerView.selectRow(hour, inComponent: 0, animated: true)
+            minutes = (counter % 3600) / 60
+            pickerView.selectRow(minutes, inComponent: 1, animated: true)
+            seconds = (counter % 3600) % 60
+            pickerView.selectRow(seconds, inComponent: 2, animated: true)
+            saveButton.isEnabled = true
+        }
                  
-           if indexPath != nil {
-               counter = Int(tasks[indexPath.row].counter)
-               textField.text = tasks[indexPath.row].name
-               hour = counter / 3600
-               pickerView.selectRow(hour, inComponent: 0, animated: true)
-               minutes = (counter % 3600) / 60
-               pickerView.selectRow(minutes, inComponent: 1, animated: true)
-               seconds = (counter % 3600) % 60
-               pickerView.selectRow(seconds, inComponent: 2, animated: true)
-               saveButton.isEnabled = true
-           }
-                 
-           cancelButton.layer.cornerRadius = cancelButton.frame.width / 2
-           saveButton.layer.cornerRadius = saveButton.frame.width / 2
-       }
+        cancelButton.layer.cornerRadius = cancelButton.frame.width / 2
+        saveButton.layer.cornerRadius = saveButton.frame.width / 2
+    }
 } 
 
 extension NewTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
@@ -126,7 +127,7 @@ extension NewTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             break;
         }
         
-        counter = (hour * 60 * 60) + (minutes * 60) + seconds
+        counter = (hour * 60 * 60) + (minutes * 60) + seconds 
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {

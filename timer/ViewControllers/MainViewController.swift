@@ -8,14 +8,15 @@
 
 import UIKit
 import BonsaiController
+import CoreData
 
-var tasks: [Task] = []
+var tasks: [NSManagedObject] = []
+
 class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
    
     @IBOutlet weak var emptyTaskLabel: UILabel!
     @IBOutlet weak var addButton: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,9 +24,16 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.rowHeight = 80
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+       fetchData()
+    }
+    
     // MARK: - Table view data source
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+       
         return tasks.count
        }
        
@@ -34,7 +42,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
         
         let task = tasks[indexPath.row]
-        cell.configure(task: task)
+        cell.configure(task: task, indexPath: indexPath)
         
         return cell
        }
@@ -45,8 +53,32 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+
+        if tasks.count > indexPath.row {
+            let task = tasks[indexPath.row]
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let context = appDelegate.persistentContainer.viewContext
+            context.delete(task)
+            tasks.remove(at: indexPath.row)
+            
+            do {
+                try context.save()
+            } catch let error {
+                print("Не удалось сохранить из-за ошибки \(error).")
+            }
+            tableView.deleteRows(at:[indexPath],with: .fade)
+        }
+    }
+    
     @IBAction func unwindSegue(_ segue: UIStoryboardSegue) {
+        
         tableView.reloadData()
+        
         if tasks.count > 0 {
             emptyTaskLabel.isHidden = true
         }
@@ -65,6 +97,19 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         if segue.destination is NewTaskViewController {
             segue.destination.transitioningDelegate = self
             segue.destination.modalPresentationStyle = .custom
+        }
+    }
+    
+    private func fetchData() {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return}
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Task")
+                    
+        do {
+            tasks = try managedContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Не могу прочитать. \(error), \(error.userInfo)")
         }
     }
 }

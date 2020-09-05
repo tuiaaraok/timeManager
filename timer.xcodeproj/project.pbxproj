@@ -16,12 +16,13 @@
 		630EEF7724E55F190086BA2F /* NewTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630EEF7624E55F190086BA2F /* NewTaskViewController.swift */; };
 		630EEF7924E5CE9E0086BA2F /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630EEF7824E5CE9E0086BA2F /* MainViewController.swift */; };
 		630EEF7B24E5CF610086BA2F /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630EEF7A24E5CF610086BA2F /* TableViewCell.swift */; };
-		630EEF7D24E5D0510086BA2F /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630EEF7C24E5D0510086BA2F /* Task.swift */; };
 		63CEBB0A24F937BB00882B38 /* MainViewControllerBonsaiExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CEBB0924F937BB00882B38 /* MainViewControllerBonsaiExtention.swift */; };
 		63CEBB1224FA2A7B00882B38 /* TimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CEBB1124FA2A7B00882B38 /* TimeManager.swift */; };
 		63CEBB1B24FBBF8E00882B38 /* success.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63CEBB1A24FBBF8D00882B38 /* success.mp3 */; };
 		63CEBB1F24FBF88100882B38 /* fail.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63CEBB1E24FBF88100882B38 /* fail.mp3 */; };
 		63CEBB2224FC065800882B38 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CEBB2124FC065800882B38 /* AudioManager.swift */; };
+		63CEBB2524FCDCF900882B38 /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 63CEBB2324FCDCF900882B38 /* CoreDataModel.xcdatamodeld */; };
+		63CEBB272502C91200882B38 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CEBB262502C91200882B38 /* DataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,12 +36,13 @@
 		630EEF7624E55F190086BA2F /* NewTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskViewController.swift; sourceTree = "<group>"; };
 		630EEF7824E5CE9E0086BA2F /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		630EEF7A24E5CF610086BA2F /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
-		630EEF7C24E5D0510086BA2F /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		63CEBB0924F937BB00882B38 /* MainViewControllerBonsaiExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewControllerBonsaiExtention.swift; sourceTree = "<group>"; };
 		63CEBB1124FA2A7B00882B38 /* TimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeManager.swift; sourceTree = "<group>"; };
 		63CEBB1A24FBBF8D00882B38 /* success.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = success.mp3; sourceTree = "<group>"; };
 		63CEBB1E24FBF88100882B38 /* fail.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = fail.mp3; sourceTree = "<group>"; };
 		63CEBB2124FC065800882B38 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		63CEBB2424FCDCF900882B38 /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
+		63CEBB262502C91200882B38 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		868B3013A22E0E81CA95CA00 /* Pods_timer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_timer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4A6214020D5F5D50460803D /* Pods-timer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-timer.debug.xcconfig"; path = "Target Support Files/Pods-timer/Pods-timer.debug.xcconfig"; sourceTree = "<group>"; };
 		E8084381C58C3761E4ADBEB5 /* Pods-timer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-timer.release.xcconfig"; path = "Target Support Files/Pods-timer/Pods-timer.release.xcconfig"; sourceTree = "<group>"; };
@@ -90,9 +92,9 @@
 				63CEBB0B24F965AD00882B38 /* ViewControllers */,
 				63CEBB1024FA2A2E00882B38 /* WorkWithTime */,
 				63CEBB2024FC063D00882B38 /* Helpers */,
-				63CEBB0C24F965CE00882B38 /* Model */,
 				63CEBB0D24F965DD00882B38 /* UIBuilders */,
 				63CEBB0E24F965EE00882B38 /* SupportFiles */,
+				63CEBB2324FCDCF900882B38 /* CoreDataModel.xcdatamodeld */,
 			);
 			path = timer;
 			sourceTree = "<group>";
@@ -106,14 +108,6 @@
 				63CEBB0F24F9665300882B38 /* Extentions */,
 			);
 			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		63CEBB0C24F965CE00882B38 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				630EEF7C24E5D0510086BA2F /* Task.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		63CEBB0D24F965DD00882B38 /* UIBuilders */ = {
@@ -166,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				63CEBB2124FC065800882B38 /* AudioManager.swift */,
+				63CEBB262502C91200882B38 /* DataManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -297,9 +292,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				63CEBB2224FC065800882B38 /* AudioManager.swift in Sources */,
+				63CEBB272502C91200882B38 /* DataManager.swift in Sources */,
 				63CEBB0A24F937BB00882B38 /* MainViewControllerBonsaiExtention.swift in Sources */,
 				630EEF4124E43CAB0086BA2F /* AppDelegate.swift in Sources */,
-				630EEF7D24E5D0510086BA2F /* Task.swift in Sources */,
+				63CEBB2524FCDCF900882B38 /* CoreDataModel.xcdatamodeld in Sources */,
 				630EEF7724E55F190086BA2F /* NewTaskViewController.swift in Sources */,
 				630EEF7B24E5CF610086BA2F /* TableViewCell.swift in Sources */,
 				630EEF4324E43CAB0086BA2F /* SceneDelegate.swift in Sources */,
@@ -504,6 +500,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		63CEBB2324FCDCF900882B38 /* CoreDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				63CEBB2424FCDCF900882B38 /* CoreDataModel.xcdatamodel */,
+			);
+			currentVersion = 63CEBB2424FCDCF900882B38 /* CoreDataModel.xcdatamodel */;
+			path = CoreDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 630EEF3524E43CAB0086BA2F /* Project object */;
 }
