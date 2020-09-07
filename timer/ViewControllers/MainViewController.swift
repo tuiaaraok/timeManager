@@ -12,26 +12,47 @@ import CoreData
 
 var tasks: [NSManagedObject] = []
 
+
 class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
    
     @IBOutlet weak var emptyTaskLabel: UILabel!
     @IBOutlet weak var addButton: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
     
+    var myTimer: Timer!
+    let dataManager = DataManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+       
+        self.myTimer = Timer(timeInterval: 50, target: self, selector: #selector(reset), userInfo: nil, repeats: true)
+        RunLoop.main.add(self.myTimer, forMode: .default)
+      
         tableView.rowHeight = 80
-        
-        if tableView.numberOfRows(inSection: 0) > 0 {
-            emptyTaskLabel.isHidden = true
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
        fetchData()
+        
+        if tableView.numberOfRows(inSection: 0) > 0 {
+            emptyTaskLabel.isHidden = true
+        }
+    }
+    
+    @objc func reset() {
+
+        for task in tasks {
+            task.setValue("none", forKey: "status")
+        }
+    
+        do {
+            try dataManager.managedContext.save()
+            tableView.reloadData()
+        } catch let error {
+            print("Failed to reset task", error.localizedDescription)
+        }
     }
     
     // MARK: - Table view data source

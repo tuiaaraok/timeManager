@@ -35,6 +35,8 @@ class TableViewCell: UITableViewCell {
     
     func configure (_ task: NSManagedObject, _ indexPath: IndexPath) {
         
+        startButton.setImage(UIImage(named: "PlayButton")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        
         taskNameLabel.text = task.value(forKey: "name") as? String
         self.indexPath = indexPath
         
@@ -42,11 +44,16 @@ class TableViewCell: UITableViewCell {
             counter = (task.value(forKey: "counter") as? Double)! + 1
             runTimer()
         }
+          contentView.backgroundColor = #colorLiteral(red: 0.1888155764, green: 0.1888155764, blue: 0.1888155764, alpha: 1)
+                    timerLabel.textColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)
+                    taskNameLabel.textColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)
+                    startButton.isHidden = false
+                    startButton.isEnabled = true
+                    doneButton.isEnabled = false
      
         if task.value(forKey: "status") as? String == "success" {
             setupSuccessScreen()
-        }
-        if task.value(forKey: "status") as? String == "fail" {
+        } else if task.value(forKey: "status") as? String == "fail" {
             setupFailScreen()
         }
     }
@@ -56,6 +63,7 @@ class TableViewCell: UITableViewCell {
     @IBAction func playButtonPressed() {
         
         if !isStarted {
+            doneButton.isEnabled = true
             if !isTimerRunning {
                 timer = Timer.scheduledTimer(timeInterval: 0.1,
                                               target: self,
@@ -64,11 +72,11 @@ class TableViewCell: UITableViewCell {
                                               repeats: counter > 1)
                 startButton.setImage(UIImage(named: "PauseButton")?.withRenderingMode(.alwaysOriginal), for: .normal)
                 isTimerRunning = true
-                doneButton.isEnabled = true
                 isStarted = true
-             }
+            } 
         } else {
-           pause()
+            pause()
+            startButton.setImage(UIImage(named: "PlayButton")?.withRenderingMode(.alwaysOriginal), for: .normal)
         }
     }
     
@@ -76,17 +84,27 @@ class TableViewCell: UITableViewCell {
         
         setupSuccessScreen()
         audioManager.startSuccessAudio()
+        isStarted = false
         dataManager.setupStatus(text: "success", indexPath: indexPath)
+        startButton.setImage(UIImage(named: "PauseButton")?.withRenderingMode(.alwaysOriginal), for: .normal)
     }
+    
 }
 
 // MARK: - Extention
 
 extension TableViewCell {
     
+    func refreshCell() {
+        
+        contentView.backgroundColor = .darkGray
+        timerLabel.textColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)
+        taskNameLabel.textColor = .darkGray
+    }
+    
     func pause() {
         
-        doneButton.isEnabled = true
+        doneButton.isEnabled = false
         isTimerRunning = false
         timer.invalidate()
         isStarted = false
@@ -135,7 +153,6 @@ extension TableViewCell {
     
     private func setupSuccessScreen() {
         
-        doneButton.isEnabled = true
         isTimerRunning = false
         timer.invalidate()
         contentView.backgroundColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)

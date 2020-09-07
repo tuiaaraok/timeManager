@@ -11,6 +11,10 @@ import CoreData
 
 class DataManager {
     
+    let date = Date()
+    let calendar = Calendar.current
+   
+    
     let managedContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     func save(_ taskName: String, counter: Double) {
@@ -57,4 +61,14 @@ class DataManager {
                print("Failed to save task", error.localizedDescription)
            }
        }
+    
+    func getHoursAndMinutes() -> Int {
+        let hour = calendar.component(.hour, from: date)
+        let minutes = calendar.component(.minute, from: date)
+        let seconds = calendar.component(.second, from: date)
+       
+       // print(hour, minutes, seconds)
+        return hour + minutes //+ seconds
+    }
 }
+
