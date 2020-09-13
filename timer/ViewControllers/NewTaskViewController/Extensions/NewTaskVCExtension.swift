@@ -1,79 +1,65 @@
 //
-//  ViewController.swift
+//  NewTaskVCExtention.swift
 //  timer
 //
-//  Created by Айсен Шишигин on 13/08/2020.
+//  Created by Айсен Шишигин on 12/09/2020.
 //  Copyright © 2020 Туйаара Оконешникова. All rights reserved.
 //
 
 import UIKit
-import CoreData
 
-class NewTaskViewController: UIViewController {
+extension NewTaskViewController {
+    
+    // MARK: - Configure UIViews
 
-    @IBOutlet weak var pickerView: UIPickerView!
-    @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var saveButton: UIButton!
-    
-    var hour:Int = 0
-    var minutes:Int = 0
-    var seconds:Int = 0
-    var counter = 0
-    var indexPath: IndexPath!
-    let dataManager = DataManager()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-  
-        saveButton.isEnabled = false
+    func configureButtons() {
         
-        textField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
-        setupScreen()
+        cancelButton.setImage(UIImage(named: "cancel")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        saveButton.setImage(UIImage(named: "DoneButton")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        
+        cancelButton.addTarget(self, action: #selector(cancelButtonPressed(_:)), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(saveButtonPressed(_:)), for: .touchUpInside)
+              
+        view.addSubview(cancelButton)
+        view.addSubview(saveButton)
     }
     
-    @IBAction func cancelButtonPressed(_ sender: Any) {
+    func configureTextFeld() {
+        
+        textField.becomeFirstResponder()
+        textField.backgroundColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)
+        textField.placeholder = "Напишите задание"
+        textField.borderStyle = .roundedRect
+    }
+    
+    // MARK: - Objc methods
+    
+    @objc func cancelButtonPressed(_ sender: Any) {
         dismiss(animated: true)
     }
 
-    @IBAction func addButtonPressed(_ sender: Any) {
-        
+    @objc func saveButtonPressed(_ sender: Any) {
+          
         if indexPath != nil {
             dataManager.edit(textField.text!, counter: Double(counter), indexPath: indexPath)
         } else {
-            dataManager.save(textField.text!, counter: Double(counter))
+            dataManager.save(textField.text!, counter: Double(counter), mainVC.tableView)
         }
+          
+        mainVC.updateScreen()
+        NotificationCenter.default.post(name: .reload, object: nil)
+        dismiss(animated: true)
     }
-    
+      
     @objc func textFieldChanged() {
-        
+          
         if textField.text?.isEmpty == false  {
             saveButton.isEnabled = true
         } else {
             saveButton.isEnabled = false
         }
     }
-    
-    private func setupScreen() {
-        
-        textField.becomeFirstResponder()
-        
-        if indexPath != nil {
-            counter = Int((tasks[indexPath.row].value(forKey: "counter") as? Double)!)
-            textField.text = (tasks[indexPath.row].value(forKey: "name") as? String)!
-            hour = counter / 3600
-            pickerView.selectRow(hour, inComponent: 0, animated: true)
-            minutes = (counter % 3600) / 60
-            pickerView.selectRow(minutes, inComponent: 1, animated: true)
-            seconds = (counter % 3600) % 60
-            pickerView.selectRow(seconds, inComponent: 2, animated: true)
-            saveButton.isEnabled = true
-        }
-                 
-        cancelButton.layer.cornerRadius = cancelButton.frame.width / 2
-        saveButton.layer.cornerRadius = saveButton.frame.width / 2
-    }
-} 
+}
 
 extension NewTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
@@ -116,6 +102,7 @@ extension NewTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
         switch component {
         case 0:
             hour = row
@@ -127,7 +114,7 @@ extension NewTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             break;
         }
         
-        counter = (hour * 60 * 60) + (minutes * 60) + seconds 
+        counter = (hour * 60 * 60) + (minutes * 60) + seconds
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
@@ -159,4 +146,8 @@ extension NewTaskViewController: UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+}
+
+extension Notification.Name {
+    static let reload = Notification.Name("reload")
 }
