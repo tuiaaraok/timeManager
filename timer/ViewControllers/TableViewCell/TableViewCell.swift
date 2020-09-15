@@ -100,9 +100,116 @@ class TableViewCell: UITableViewCell {
         startButton.setImage(UIImage(named: "PauseButton")?.withRenderingMode(.alwaysOriginal), for: .normal)
     }
     
-    // MARK: - Configure screen
+    @objc func runTimer() {
+         
+         if counter > 1 {
+             counter -= 0.1
+         }
+     
+         configureTimerLAbelText()
+     }
     
-    func createConstraints() {
+    // MARK: - Configure UIVIews
+    
+    func configureLabels() {
+        
+        timerLabel.textColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)
+        taskNameLabel.textColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)
+        
+        timerLabel.font = UIFont(name: "Futura-Medium", size: 18)
+        taskNameLabel.font = UIFont(name: "Futura-Medium", size: 15)
+        
+        timerLabel.minimumScaleFactor = -0.5
+        taskNameLabel.minimumScaleFactor = -0.5
+        
+        timerLabel.numberOfLines = 1
+        taskNameLabel.numberOfLines = 0
+        
+        timerLabel.textAlignment = .center
+    }
+    
+    func configureButtons() {
+        
+        startButton.setImage(UIImage(named: "PlayButton")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        doneButton.setImage(UIImage(named: "DoneButton")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        
+        startButton.addTarget(self, action: #selector(startButtonPressed), for: .touchUpInside)
+        doneButton.addTarget(self, action: #selector(doneButtonPressed), for: .touchUpInside)
+    }
+}
+
+// MARK: - Extension
+
+extension TableViewCell {
+    
+//    func refreshCell() {
+//        
+//        contentView.backgroundColor = .darkGray
+//        timerLabel.textColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)
+//        taskNameLabel.textColor = .darkGray
+//    }
+    
+    func pause() {
+
+        doneButton.isEnabled = false
+        isTimerRunning = false
+        timer.invalidate()
+        isStarted = false
+    }
+    
+    private func configureTimerLAbelText() {
+        
+        let flooredCounter = Int(floor(counter))
+        let hour = flooredCounter / 3600
+
+        let minute = (flooredCounter % 3600) / 60
+        var minuteString = "\(minute)"
+        if minute < 10 {
+            minuteString = "0\(minute)"
+        }
+
+        let second = (flooredCounter % 3600) % 60
+        var secondString = "\(second)"
+        if second < 10 {
+            secondString = "0\(second)"
+        }
+               
+        var hourString = "\(hour)"
+        if hour < 10 {
+            hourString = "0\(hour)"
+        }
+
+        timerLabel.text = "\(hourString):\(minuteString):\(secondString)"
+               
+        if counter < 1.0 {
+            setupFailScreen()
+            dataManager.setupStatus(text: "fail", indexPath: indexPath)
+            audioManager.startFailAudio()
+        }
+    }
+    
+    private func setupFailScreen() {
+        
+        timerLabel.text = "Fail!"
+        timerLabel.textColor = .red
+        contentView.backgroundColor = .black
+        doneButton.isHidden = true
+        timer.invalidate()
+        startButton.isHidden = true
+    }
+    
+    private func setupSuccessScreen() {
+        
+        isTimerRunning = false
+        timer.invalidate()
+        contentView.backgroundColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)
+        timerLabel.textColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
+        taskNameLabel.textColor = .darkGray
+        timerLabel.text = "Success!"
+        startButton.isHidden = true
+    }
+    
+    private func createConstraints() {
         
         let screenSize = UIScreen.main.bounds
         
@@ -135,108 +242,5 @@ class TableViewCell: UITableViewCell {
         timerLabel.widthAnchor.constraint(equalToConstant: screenSize.width / 4.5).isActive = true
         timerLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 1/3).isActive = true
         timerLabel.trailingAnchor.constraint(equalTo: startButton.leadingAnchor, constant: -7).isActive = true
-    }
-    
-    func configureLabels() {
-        
-        timerLabel.textColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)
-        taskNameLabel.textColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)
-        
-        timerLabel.font = UIFont(name: "Futura-Medium", size: 18)
-        taskNameLabel.font = UIFont(name: "Futura-Medium", size: 15)
-        
-        timerLabel.minimumScaleFactor = -0.5
-        taskNameLabel.minimumScaleFactor = -0.5
-        
-        timerLabel.numberOfLines = 1
-        taskNameLabel.numberOfLines = 0
-        
-        timerLabel.textAlignment = .center
-    }
-    
-    func configureButtons() {
-        
-        startButton.setImage(UIImage(named: "PlayButton")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        doneButton.setImage(UIImage(named: "DoneButton")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        
-        startButton.addTarget(self, action: #selector(startButtonPressed), for: .touchUpInside)
-        doneButton.addTarget(self, action: #selector(doneButtonPressed), for: .touchUpInside)
-    }
-}
-
-// MARK: - Extention
-
-extension TableViewCell {
-    
-    func refreshCell() {
-        
-        contentView.backgroundColor = .darkGray
-        timerLabel.textColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)
-        taskNameLabel.textColor = .darkGray
-    }
-    
-    func pause() {
-        
-        doneButton.isEnabled = false
-        isTimerRunning = false
-        timer.invalidate()
-        isStarted = false
-    }
-    
-     @objc func runTimer() {
-        
-        if counter > 1 {
-            counter -= 0.1
-        }
-
-            // HH:MM:SS:_
-        let flooredCounter = Int(floor(counter))
-        let hour = flooredCounter / 3600
-
-        let minute = (flooredCounter % 3600) / 60
-        var minuteString = "\(minute)"
-        if minute < 10 {
-            minuteString = "0\(minute)"
-        }
-
-        let second = (flooredCounter % 3600) % 60
-        var secondString = "\(second)"
-        if second < 10 {
-            secondString = "0\(second)"
-        }
-        
-        var hourString = "\(hour)"
-        if hour < 10 {
-            hourString = "0\(hour)"
-        }
-
-        timerLabel.text = "\(hourString):\(minuteString):\(secondString)"
-        
-         if counter < 1.0 {
-            setupFailScreen()
-            dataManager.setupStatus(text: "fail", indexPath: indexPath)
-            audioManager.startFailAudio()
-        }
-    }
-    
-    private func setupFailScreen() {
-        
-        timerLabel.text = "Fail!"
-        timerLabel.textColor = .red
-        contentView.backgroundColor = .black
-        doneButton.isHidden = true
-        timer.invalidate()
-        startButton.isHidden = true
-    }
-    
-    private func setupSuccessScreen() {
-        
-        isTimerRunning = false
-        timer.invalidate()
-        contentView.backgroundColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)
-        timerLabel.textColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
-        taskNameLabel.textColor = .darkGray
-        timerLabel.text = "Success!"
-        startButton.isHidden = true
     }
 }

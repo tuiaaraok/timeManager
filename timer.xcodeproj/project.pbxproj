@@ -103,25 +103,17 @@
 			isa = PBXGroup;
 			children = (
 				630EEF7624E55F190086BA2F /* NewTaskViewController.swift */,
-				6345E9B1250D5CEB00B1527E /* Extensions */,
-			);
-			path = NewTaskViewController;
-			sourceTree = "<group>";
-		};
-		6345E9B1250D5CEB00B1527E /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
 				6345E9AE250D512F00B1527E /* NewTaskVCExtension.swift */,
 				6345E9B2250D5D0700B1527E /* Constraints.swift */,
 			);
-			path = Extensions;
+			path = NewTaskViewController;
 			sourceTree = "<group>";
 		};
 		6345E9B4250D5D6900B1527E /* MainViewController */ = {
 			isa = PBXGroup;
 			children = (
 				630EEF7824E5CE9E0086BA2F /* MainViewController.swift */,
-				63CEBB0F24F9665300882B38 /* Extentions */,
+				63CEBB0924F937BB00882B38 /* BonsaiExtension.swift */,
 			);
 			path = MainViewController;
 			sourceTree = "<group>";
@@ -161,14 +153,6 @@
 				630EEF4E24E43CAB0086BA2F /* Info.plist */,
 			);
 			path = SupportFiles;
-			sourceTree = "<group>";
-		};
-		63CEBB0F24F9665300882B38 /* Extentions */ = {
-			isa = PBXGroup;
-			children = (
-				63CEBB0924F937BB00882B38 /* BonsaiExtension.swift */,
-			);
-			path = Extentions;
 			sourceTree = "<group>";
 		};
 		63CEBB1024FA2A2E00882B38 /* WorkWithTime */ = {

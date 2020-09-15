@@ -42,9 +42,9 @@ class MainViewController: UITableViewController {
     
     func configureTimerToReset() {
         
-        self.timerToReset = Timer(timeInterval: 86400,
+        self.timerToReset = Timer(timeInterval: 1,
                              target: self,
-                             selector: #selector(reset),
+                             selector: #selector(refresh),
                              userInfo: nil,
                              repeats: true)
                
@@ -62,7 +62,7 @@ class MainViewController: UITableViewController {
           tableView.reloadData()
       }
     
-    @objc func reset() {
+    @objc func refresh() {
         
         if dataManager.getHoursAndMinutes() == 0 {
             
@@ -76,18 +76,21 @@ class MainViewController: UITableViewController {
             } catch let error {
                 print("Failed to reset task", error.localizedDescription)
             }
+            
+            UserDefaults.standard.set(Date(), forKey: "lastRefresh")
+            
         }
     }
     
-    @objc func addButtonTapped() {
-    
+  @objc func addButtonTapped() {
+        
         let nextScreen = NewTaskViewController()
         nextScreen.transitioningDelegate = self
         nextScreen.modalPresentationStyle = .custom
         navigationController?.present(nextScreen, animated: true)
     }
     
-    func setupNavigationBar() {
+    private func setupNavigationBar() {
         
         title = "Задания"
         navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)
@@ -158,5 +161,3 @@ class MainViewController: UITableViewController {
         }
     }
 }
-
-

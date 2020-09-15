@@ -11,8 +11,6 @@ import CoreData
 
 class DataManager {
     
-    let date = Date()
-    let calendar = Calendar.current
     let managedContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     func save(_ taskName: String, counter: Double, _ tableView: UITableView) {
@@ -66,10 +64,13 @@ class DataManager {
     
     func getHoursAndMinutes() -> Int {
         
+        let date = Date()
+        let calendar = Calendar.current
+        
         let hour = calendar.component(.hour, from: date)
         let minutes = calendar.component(.minute, from: date)
         let seconds = calendar.component(.second, from: date)
-       
+        
         return hour + minutes + seconds 
     }
     
