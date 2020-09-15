@@ -18,6 +18,7 @@ class MainViewController: UITableViewController {
     
     var timerToReset: Timer!
     let dataManager = DataManager()
+    let timeManager = TimeManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,10 +65,10 @@ class MainViewController: UITableViewController {
     
     @objc func refresh() {
         
-        if dataManager.getHoursAndMinutes() == 0 {
+        if timeManager.getHoursAndMinutes() == 0 {
             
             for task in tasks {
-                    task.setValue("none", forKey: "status")
+                task.setValue("none", forKey: "status")
             }
         
             do {
@@ -95,7 +96,7 @@ class MainViewController: UITableViewController {
         title = "Задания"
         navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)
         navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor(#colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)), .font: UIFont(name: "Futura-Medium", size: 25)!]
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor(#colorLiteral(red: 1, green: 0.6936842203, blue: 0.2769840359, alpha: 1)), .font: UIFont(name: "Futura-Medium", size: 15)! ]
         navigationController?.navigationBar.barTintColor = UIColor(#colorLiteral(red: 0.1888155764, green: 0.1888155764, blue: 0.1888155764, alpha: 1))
         navigationController?.navigationBar.prefersLargeTitles = true
         
